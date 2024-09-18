@@ -1,1 +1,2 @@
-Couldnt make it in for the first lab sorry for the absence.
+LAB 1: Couldnt make it in for the first lab sorry for the absence.
+LAB 2: ...
