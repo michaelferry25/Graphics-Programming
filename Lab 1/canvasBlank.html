@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Canvas Lab 1</title>
+    
+    <!--CSS part-->
+    <style type="text/css">
+        canvas {
+            border: 2px solid black; 
+        }
+    </style>
+
+</head>
+
+<body>
+  <!--CANVAS part-->
+
+    <canvas id="canvasLab1" width="500" height="400"></canvas>
+
+    <script type="text/javascript">
+
+        const canvas = document.getElementById('canvasLab1');
+        const ctx = canvas.getContext('2d');
+
+        ctx.fillStyle = 'rgb(0, 255, 0)'; //fill colour of green
+        ctx.fillRect(100, 100, 150, 100);
+
+        //text to the canvas
+        ctx.font = '20px Arial';
+        ctx.fillStyle = 'black';
+        ctx.fillText('Michael', 120, 50);  //puts my name on the canvas
+    </script>
+</body>
+</html>
