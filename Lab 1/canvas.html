@@ -1,2 +1,57 @@
-Lab 1
-This folder contains files for this lab
+<<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Canvas Lab 1</title>
+    
+    <!-- CSS part -->
+    <style type="text/css">
+        canvas {
+            border: 2px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- CANVAS part -->
+    <canvas id="canvasLab1" width="500" height="400"></canvas>
+
+    <script type="text/javascript">
+        const canvas = document.getElementById('canvasLab1');
+        const ctx = canvas.getContext('2d');
+
+        //gray background covering the canvas
+        ctx.fillStyle = 'gray';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        //green rectangle
+        ctx.fillStyle = 'rgba(0, 255, 0, 0.4)'; //40% transparency
+        ctx.fillRect(100, 100, 150, 100);
+
+        //blue rectangle border
+        ctx.strokeStyle = 'rgba(0, 0, 255, 0.75)'; // border with 75% transparency
+        ctx.lineWidth = 5;
+        ctx.strokeRect(100, 100, 150, 100);
+
+        //red circle 
+        ctx.fillStyle = 'rgba(255, 0, 0, 0.9)'; // transparency of 90% on the red part of circle
+        ctx.beginPath();
+        ctx.arc(300, 200, 50, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
+
+        //blue semi-circle
+        ctx.fillStyle = 'rgba(0, 0, 255, 0.5)'; // Blue with 50% opacity
+        ctx.beginPath();
+        ctx.arc(400, 100, 50, 0, Math.PI * 1.5);
+        ctx.fill();
+        ctx.stroke();
+
+        // text/name to the canvas
+        ctx.font = '20px Arial';
+        ctx.fillStyle = 'black';
+        ctx.fillText('Michael', 120, 50);
+    </script>
+    
+</body>
+</html>
