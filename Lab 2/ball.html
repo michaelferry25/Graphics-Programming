@@ -11,6 +11,11 @@
       body {
           background-color: white;
       }
+      
+        canvas {
+            border: 2px solid black;
+        }
+    
     </style>
 
   </head>
@@ -18,13 +23,19 @@
   <body>
 
     <canvas id="canvas-for-ball"></canvas>
-
+    
     <script type="text/javascript">
+
+    
+
       // Gets a handle to the element with id canvasOne.
       var canvas = document.getElementById("canvas-for-ball");
       // Get a 2D context for the canvas.
       var ctx = canvas.getContext("2d");
       
+      canvas.height=200;
+      canvas.width=300;
+
       // The vertical location of the ball.
       var y = 10;
       // A function to repeat every time the animation loops.
