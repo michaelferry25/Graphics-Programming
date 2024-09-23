@@ -26,27 +26,33 @@
 
         //green rectangle
         ctx.fillStyle = 'rgba(0, 255, 0, 0.4)'; //40% transparency
-        ctx.fillRect(100, 100, 150, 100);
+        ctx.fillRect(200, 100, 150, 100);
 
         //blue rectangle border
-        ctx.strokeStyle = 'rgba(0, 0, 255, 0.75)'; // border with 75% transparency
+        ctx.strokeStyle = 'rgba(0, 0, 255, 0.3)'; // border with 75% transparency
         ctx.lineWidth = 5;
-        ctx.strokeRect(100, 100, 150, 100);
+        ctx.strokeRect(200, 100, 150, 100);
 
         //red circle 
-        ctx.fillStyle = 'rgba(255, 0, 0, 0.9)'; // transparency of 90% on the red part of circle
+        ctx.fillStyle = 'rgba(255, 0, 0, 0.5)'; // transparency % on the red part of circle
         ctx.beginPath();
         ctx.arc(300, 200, 50, 0, 2 * Math.PI);
         ctx.fill();
         ctx.stroke();
 
-        //blue semi-circle
+        //blue 3/4-circle
         ctx.fillStyle = 'rgba(0, 0, 255, 0.5)'; // Blue with 50% opacity
         ctx.beginPath();
-        ctx.arc(400, 100, 50, 0, Math.PI * 1.5);
+        ctx.arc(350, 100, 50, 0, Math.PI * 1.5);
         ctx.fill();
         ctx.stroke();
 
+        //semi-circle
+        ctx.fillStyle = 'rgba(0, 255, 255, 0.5)'; // Blue with 50% opacity
+        ctx.beginPath();
+        ctx.arc(300, 100, 50, 0, Math.PI * 1.1);
+        ctx.fill();
+        ctx.stroke();
         // text/name to the canvas
         ctx.font = '20px Arial';
         ctx.fillStyle = 'black';
