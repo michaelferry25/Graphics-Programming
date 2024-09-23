@@ -26,9 +26,6 @@
     <canvas id="canvas-for-ball"></canvas>
     
     <script type="text/javascript">
-
-    
-
       // Gets a handle to the element with id canvasOne.
       var canvas = document.getElementById("canvas-for-ball");
       // Get a 2D context for the canvas.
@@ -45,14 +42,20 @@
 
         // Draw the ball (stroked, not filled).
         ctx.beginPath();
-        ctx.arc(50, y, 3, 0, 2 * Math.PI);
+        ctx.arc(50, y, 6, 0, 2 * Math.PI);
         ctx.stroke();
         
         // Update the y location.
         y += 1;
         
+        if(y >= 194)
+        {
+          return;
+        }
+
         window.requestAnimationFrame(repeatme);
       }
+
       
       // Get the animation going.
       repeatme();
