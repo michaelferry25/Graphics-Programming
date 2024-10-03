@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Canvas</title>
+
+    <style type="text/css">
+      canvas {
+        border: 1px solid grey; 
+      }
+    </style>
+
+  </head>
+
+  <body>
+    <p>This is a paragraph.</p>
+
+    <canvas id="canvas-for-ball"></canvas>
+
+    <script type="text/javascript">
+      var noClicks = 0;
+      
+      // Get a handle to the canvas element
+      var canvas = document.getElementById("canvas-for-ball");
+      // Get the 2D context for the canvas
+      var ctx = canvas.getContext("2d");
+      // Set canvas dimensions
+      canvas.width = 500;
+      canvas.height = 500;
+
+      // Set the fill style to red
+      ctx.fillStyle = "rgb(255, 0, 0)";
+      
+      canvas.addEventListener("click", function(event) {
+        // Log the event variable to the console
+        console.log(event);
+
+        // Get the mouse click coordinates in the canvas
+        var x = event.clientX - canvas.offsetLeft;
+        var y = event.clientY - canvas.offsetTop;
+        
+        // Draw the circle in the click location
+        ctx.beginPath();
+        ctx.arc(x, y, 6, 0, 2 * Math.PI);
+        ctx.fill();
+        
+        noClicks += 1;
+        console.log(noClicks);
+      });
+    </script>
+
+  </body>
+
+</html>
