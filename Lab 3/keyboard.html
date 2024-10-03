@@ -3,7 +3,7 @@
 
   <head>
     <meta charset="UTF-8">
-    <title>Bouncing Ball with Paddles</title>
+    <title>Bouncing Ball Game</title>
 
     <style type="text/css">
       canvas {
@@ -31,7 +31,7 @@
         draw: function() {
           ctx.beginPath();
           ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-          ctx.fillStyle = "black";
+          ctx.fillStyle = "black"; // Ball color
           ctx.fill();
           ctx.closePath();
         },
@@ -39,13 +39,21 @@
           this.x += this.dx;
           this.y += this.dy;
 
-          // Bounce off walls
-          if (this.x + this.radius > canvas.width || this.x - this.radius < 0) {
-            this.dx = -this.dx;
-          }
+          // Bounce off top and bottom walls
           if (this.y + this.radius > canvas.height || this.y - this.radius < 0) {
             this.dy = -this.dy;
           }
+
+          // Reset the ball if it goes off the left or right side
+          if (this.x + this.radius > canvas.width || this.x - this.radius < 0) {
+            this.reset();
+          }
+        },
+        reset: function() {
+          this.x = 250;
+          this.y = 200;
+          this.dx = 2;
+          this.dy = 2;
         }
       };
 
@@ -56,36 +64,85 @@
           this.y = y;
           this.width = width;
           this.height = height;
+          this.dy = 5; // The speed of the paddle when using keyboard input
         }
 
         // Draw the paddle
         draw() {
           ctx.beginPath();
           ctx.rect(this.x, this.y, this.width, this.height);
-          ctx.fillStyle = "black";
+          ctx.fillStyle = "black"; // Paddle color changed to black
           ctx.fill();
           ctx.closePath();
         }
+
+        // Move the paddle based on keyboard input (up/down arrows)
+        move(direction) {
+          if (direction === "up" && this.y > 0) {
+            this.y -= this.dy;
+          } else if (direction === "down" && this.y + this.height < canvas.height) {
+            this.y += this.dy;
+          }
+        }
+
+        // Move the paddle to the mouse's y-coordinate
+        moveTo(yPosition) {
+          // Ensure the paddle stays within the canvas bounds
+          if (yPosition >= 0 && yPosition + this.height <= canvas.height) {
+            this.y = yPosition;
+          }
+        }
       }
 
-      // The two paddles on both sides
+      // Instantiate two paddles
       var leftPaddle = new Paddle(10, 150, 10, 100); // Left paddle
       var rightPaddle = new Paddle(480, 150, 10, 100); // Right paddle
 
-      //Game loop
+      // Detect collision between the ball and paddles
+      function detectCollision(paddle) {
+        return (
+          ball.x - ball.radius < paddle.x + paddle.width && // Check if ball is within paddle's x-range
+          ball.x + ball.radius > paddle.x && // Check if ball overlaps paddle horizontally
+          ball.y > paddle.y && // Check if ball is within paddle's y-range
+          ball.y < paddle.y + paddle.height
+        );
+      }
+
+      // Keydown event listener to control the paddle with up/down arrows
+      document.addEventListener("keydown", function(event) {
+        if (event.key === "ArrowUp") {
+          leftPaddle.move("up");
+        } else if (event.key === "ArrowDown") {
+          leftPaddle.move("down");
+        }
+      });
+
+      // Mouse movement event listener to control the paddle with the mouse
+      canvas.addEventListener("mousemove", function(event) {
+        var rect = canvas.getBoundingClientRect();
+        var mouseY = event.clientY - rect.top; // Get the mouse's Y position relative to the canvas
+        leftPaddle.moveTo(mouseY); // Move the paddle to the mouse's Y position
+      });
+
+      // Game loop
       function gameLoop() {
         ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
 
         ball.draw();
         ball.move();
 
+        // Check for paddle collisions
+        if (detectCollision(leftPaddle) || detectCollision(rightPaddle)) {
+          ball.dx = -ball.dx; // Reverse ball direction upon hitting a paddle
+        }
+
         leftPaddle.draw(); // Draw the left paddle
-        rightPaddle.draw(); // Draw the right paddle
+        rightPaddle.draw(); // Draw the right paddle (static for now)
 
         requestAnimationFrame(gameLoop); // Continue the game loop
       }
 
-      //starts the game loop
+      // Start the game loop
       gameLoop();
     </script>
   </body>
