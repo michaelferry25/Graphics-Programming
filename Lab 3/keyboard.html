@@ -3,7 +3,7 @@
 
   <head>
     <meta charset="UTF-8">
-    <title>Bouncing Ball Game</title>
+    <title>Bouncing Polygon Game</title>
 
     <style type="text/css">
       canvas {
@@ -21,39 +21,84 @@
       var canvas = document.getElementById("gameCanvas");
       var ctx = canvas.getContext("2d");
 
-      // Ball object
-      var ball = {
+      // Complex polygon object (instead of the ball)
+      var complexPolygon = {
         x: 250,
         y: 200,
-        radius: 10,
         dx: 2,
         dy: 2,
+        angle: 0, // Initial rotation angle
+        rotationSpeed: 0.01, // Initial rotation speed
         draw: function() {
+          ctx.save(); // Save the current state of the canvas
+
+          // Move to the center of the polygon
+          ctx.translate(this.x, this.y);
+          // Rotate the polygon
+          ctx.rotate(this.angle);
+
+          // Draw the complex polygon (star shape with square inside)
           ctx.beginPath();
-          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-          ctx.fillStyle = "black"; // Ball color is black
-          ctx.fill();
+          ctx.moveTo(0, -30); // Top point
+          ctx.lineTo(20, -10); // Right top
+          ctx.lineTo(40, -30); // Right bottom point
+          ctx.lineTo(10, 0); // Bottom right
+          ctx.lineTo(40, 30); // Bottom right
+          ctx.lineTo(20, 10); // Right bottom
+          ctx.lineTo(0, 30); // Bottom point
+          ctx.lineTo(-20, 10); // Left bottom
+          ctx.lineTo(-40, 30); // Bottom left
+          ctx.lineTo(-10, 0); // Bottom left
+          ctx.lineTo(-40, -30); // Left bottom point
+          ctx.lineTo(-20, -10); // Left top
           ctx.closePath();
+
+          ctx.fillStyle = "blue";
+          ctx.fill();
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = "black";
+          ctx.stroke();
+
+          // Draw the center square
+          ctx.beginPath();
+          ctx.rect(-10, -10, 20, 20);
+          ctx.fillStyle = "black";
+          ctx.fill();
+          ctx.stroke();
+
+          ctx.restore(); // Restore the canvas state
         },
         move: function() {
+          // Update the position of the polygon
           this.x += this.dx;
           this.y += this.dy;
 
           // Bounce off top and bottom walls
-          if (this.y + this.radius > canvas.height || this.y - this.radius < 0) {
+          if (this.y + 30 > canvas.height || this.y - 30 < 0) {
             this.dy = -this.dy;
+            this.updateRotationSpeed(); // Update speed on contact
           }
 
-          // Reset the ball if it goes off the left or right side
-          if (this.x + this.radius > canvas.width || this.x - this.radius < 0) {
-            this.reset();
+          // Check if the polygon goes off the left or right side of the canvas
+          if (this.x + 30 > canvas.width || this.x - 30 < 0) {
+            this.reset(); // Reset the polygon if it goes off the sides
           }
+
+          // Apply the rotation speed
+          this.angle += this.rotationSpeed;
+        },
+        updateRotationSpeed: function() {
+          // Change rotation speed based on the speed of movement (simple example)
+          var speedFactor = Math.abs(this.dx) + Math.abs(this.dy);
+          this.rotationSpeed = 0.01 + (speedFactor * 0.005); // Adjust the formula as needed
         },
         reset: function() {
           this.x = 250;
           this.y = 200;
           this.dx = 2;
           this.dy = 2;
+          this.angle = 0;
+          this.rotationSpeed = 0.01;
         }
       };
 
@@ -64,14 +109,14 @@
           this.y = y;
           this.width = width;
           this.height = height;
-          this.dy = 5; // The speed of the paddle when using keyboard input
+          this.dy = 8; // Increased paddle speed
         }
 
         // Draw the paddle
         draw() {
           ctx.beginPath();
           ctx.rect(this.x, this.y, this.width, this.height);
-          ctx.fillStyle = "black"; // Paddle color is black
+          ctx.fillStyle = "black";
           ctx.fill();
           ctx.closePath();
         }
@@ -87,7 +132,6 @@
 
         // Move the paddle to the mouse's y-coordinate
         moveTo(yPosition) {
-          // Ensure the paddle stays within the canvas bounds
           if (yPosition >= 0 && yPosition + this.height <= canvas.height) {
             this.y = yPosition;
           }
@@ -98,24 +142,26 @@
       var leftPaddle = new Paddle(10, 150, 10, 100); // Left paddle
       var rightPaddle = new Paddle(480, 150, 10, 100); // Right paddle
 
-      // Detect collision between the ball and paddles
+      // Detect collision between the polygon and paddles
       function detectCollision(paddle) {
         return (
-          ball.x - ball.radius < paddle.x + paddle.width && // Check if ball is within paddle's x-range
-          ball.x + ball.radius > paddle.x && // Check if ball overlaps paddle horizontally
-          ball.y > paddle.y && // Check if ball is within paddle's y-range
-          ball.y < paddle.y + paddle.height
+          complexPolygon.x - 30 < paddle.x + paddle.width && // Check if polygon is within paddle's x-range
+          complexPolygon.x + 30 > paddle.x && // Check if polygon overlaps paddle horizontally
+          complexPolygon.y > paddle.y && // Check if polygon is within paddle's y-range
+          complexPolygon.y < paddle.y + paddle.height
         );
       }
 
-      // Keydown event listener to control the left paddle (W/S keys)
+      // Keydown event listener to control the paddles
       document.addEventListener("keydown", function(event) {
+        // Left paddle (W/S keys)
         if (event.key === "w" || event.key === "W") {
           leftPaddle.move("up");
         } else if (event.key === "s" || event.key === "S") {
           leftPaddle.move("down");
         }
-        // Keydown event listener to control the right paddle (Arrow keys)
+
+        // Right paddle (Arrow keys)
         if (event.key === "ArrowUp") {
           rightPaddle.move("up");
         } else if (event.key === "ArrowDown") {
@@ -127,12 +173,18 @@
       function gameLoop() {
         ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
 
-        ball.draw();
-        ball.move();
+        complexPolygon.draw();
+        complexPolygon.move();
 
-        // Check for paddle collisions
-        if (detectCollision(leftPaddle) || detectCollision(rightPaddle)) {
-          ball.dx = -ball.dx; // Reverse ball direction upon hitting a paddle
+        // Check for paddle collisions and reverse direction on hit
+        if (detectCollision(leftPaddle)) {
+          complexPolygon.dx = Math.abs(complexPolygon.dx); // Ensure the polygon moves to the right after hitting the left paddle
+          complexPolygon.updateRotationSpeed(); // Update rotation speed based on collision
+        }
+
+        if (detectCollision(rightPaddle)) {
+          complexPolygon.dx = -Math.abs(complexPolygon.dx); // Ensure the polygon moves to the left after hitting the right paddle
+          complexPolygon.updateRotationSpeed(); // Update rotation speed based on collision
         }
 
         leftPaddle.draw(); // Draw the left paddle
@@ -147,3 +199,4 @@
   </body>
 
 </html>
+
