@@ -31,7 +31,7 @@
         draw: function() {
           ctx.beginPath();
           ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-          ctx.fillStyle = "black"; // Ball color
+          ctx.fillStyle = "black"; // Ball color is black
           ctx.fill();
           ctx.closePath();
         },
@@ -71,12 +71,12 @@
         draw() {
           ctx.beginPath();
           ctx.rect(this.x, this.y, this.width, this.height);
-          ctx.fillStyle = "black"; // Paddle color changed to black
+          ctx.fillStyle = "black"; // Paddle color is black
           ctx.fill();
           ctx.closePath();
         }
 
-        // Move the paddle based on keyboard input (up/down arrows)
+        // Move the paddle based on keyboard input (up/down arrows or W/S keys)
         move(direction) {
           if (direction === "up" && this.y > 0) {
             this.y -= this.dy;
@@ -108,20 +108,19 @@
         );
       }
 
-      // Keydown event listener to control the paddle with up/down arrows
+      // Keydown event listener to control the left paddle (W/S keys)
       document.addEventListener("keydown", function(event) {
-        if (event.key === "ArrowUp") {
+        if (event.key === "w" || event.key === "W") {
           leftPaddle.move("up");
-        } else if (event.key === "ArrowDown") {
+        } else if (event.key === "s" || event.key === "S") {
           leftPaddle.move("down");
         }
-      });
-
-      // Mouse movement event listener to control the paddle with the mouse
-      canvas.addEventListener("mousemove", function(event) {
-        var rect = canvas.getBoundingClientRect();
-        var mouseY = event.clientY - rect.top; // Get the mouse's Y position relative to the canvas
-        leftPaddle.moveTo(mouseY); // Move the paddle to the mouse's Y position
+        // Keydown event listener to control the right paddle (Arrow keys)
+        if (event.key === "ArrowUp") {
+          rightPaddle.move("up");
+        } else if (event.key === "ArrowDown") {
+          rightPaddle.move("down");
+        }
       });
 
       // Game loop
@@ -137,7 +136,7 @@
         }
 
         leftPaddle.draw(); // Draw the left paddle
-        rightPaddle.draw(); // Draw the right paddle (static for now)
+        rightPaddle.draw(); // Draw the right paddle
 
         requestAnimationFrame(gameLoop); // Continue the game loop
       }
