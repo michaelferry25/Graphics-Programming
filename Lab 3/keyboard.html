@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Bouncing Ball with Paddles</title>
+
+    <style type="text/css">
+      canvas {
+        border: 1px solid grey; 
+      }
+    </style>
+
+  </head>
+
+  <body>
+    <canvas id="gameCanvas" width="500" height="400"></canvas>
+
+    <script type="text/javascript">
+      // Set up canvas
+      var canvas = document.getElementById("gameCanvas");
+      var ctx = canvas.getContext("2d");
+
+      // Ball object
+      var ball = {
+        x: 250,
+        y: 200,
+        radius: 10,
+        dx: 2,
+        dy: 2,
+        draw: function() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          ctx.fillStyle = "black";
+          ctx.fill();
+          ctx.closePath();
+        },
+        move: function() {
+          this.x += this.dx;
+          this.y += this.dy;
+
+          // Bounce off walls
+          if (this.x + this.radius > canvas.width || this.x - this.radius < 0) {
+            this.dx = -this.dx;
+          }
+          if (this.y + this.radius > canvas.height || this.y - this.radius < 0) {
+            this.dy = -this.dy;
+          }
+        }
+      };
+
+      // Paddle class
+      class Paddle {
+        constructor(x, y, width, height) {
+          this.x = x;
+          this.y = y;
+          this.width = width;
+          this.height = height;
+        }
+
+        // Draw the paddle
+        draw() {
+          ctx.beginPath();
+          ctx.rect(this.x, this.y, this.width, this.height);
+          ctx.fillStyle = "black";
+          ctx.fill();
+          ctx.closePath();
+        }
+      }
+
+      // The two paddles on both sides
+      var leftPaddle = new Paddle(10, 150, 10, 100); // Left paddle
+      var rightPaddle = new Paddle(480, 150, 10, 100); // Right paddle
+
+      //Game loop
+      function gameLoop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+
+        ball.draw();
+        ball.move();
+
+        leftPaddle.draw(); // Draw the left paddle
+        rightPaddle.draw(); // Draw the right paddle
+
+        requestAnimationFrame(gameLoop); // Continue the game loop
+      }
+
+      //starts the game loop
+      gameLoop();
+    </script>
+  </body>
+
+</html>
