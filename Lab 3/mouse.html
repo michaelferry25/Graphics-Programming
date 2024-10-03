@@ -36,11 +36,14 @@
         // Log the event variable to the console
         console.log(event);
 
-        // Get the mouse click coordinates in the canvas
-        var x = event.clientX - canvas.offsetLeft;
-        var y = event.clientY - canvas.offsetTop;
+        // Get the bounding rectangle of the canvas
+        var rect = canvas.getBoundingClientRect();
+
+        // Calculate the mouse position relative to the canvas
+        var x = event.clientX - rect.left;
+        var y = event.clientY - rect.top;
         
-        // Draw the circle in the click location
+        // Draw the circle at the click position
         ctx.beginPath();
         ctx.arc(x, y, 6, 0, 2 * Math.PI);
         ctx.fill();
