@@ -27,8 +27,10 @@
         y: 200,
         dx: 2,
         dy: 2,
+        gravity: 0.1, // Downward acceleration
+        bounceFactor: 0.99, // Kinetic energy loss factor
         angle: 0, // Initial rotation angle
-        rotationSpeed: 0.01, // Initial rotation speed
+        rotationSpeed: 0.015, // Initial rotation speed
         draw: function() {
           ctx.save(); // Save the current state of the canvas
 
@@ -69,14 +71,23 @@
           ctx.restore(); // Restore the canvas state
         },
         move: function() {
+          // Apply gravity
+          this.dy += this.gravity;
+
           // Update the position of the polygon
           this.x += this.dx;
           this.y += this.dy;
 
           // Bounce off top and bottom walls
-          if (this.y + 30 > canvas.height || this.y - 30 < 0) {
-            this.dy = -this.dy;
+          if (this.y + 30 > canvas.height) { // Bottom wall
+            this.y = canvas.height - 30; // Reset position to avoid sticking
+            this.dy = -this.dy * this.bounceFactor; // Bounce up with reduced energy
             this.updateRotationSpeed(); // Update speed on contact
+          }
+
+          if (this.y - 30 < 0) { // Top wall
+            this.y = 30; // Prevent object from moving above the canvas
+            this.dy = -this.dy; // Reverse the direction without energy loss at the top
           }
 
           // Check if the polygon goes off the left or right side of the canvas
