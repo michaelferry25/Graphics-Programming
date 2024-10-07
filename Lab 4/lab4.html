@@ -14,7 +14,10 @@
   </head>
 
   <body>
-    <canvas id="gameCanvas" width="500" height="400"></canvas>
+    <h1>Michael Ferry</h1>
+    <h2>Lab 4</h2>
+    <h2>Collisions</h2>
+    <canvas id="gameCanvas" width="600" height="400"></canvas>
 
     <script type="text/javascript">
       // Set up canvas
@@ -25,16 +28,26 @@
       var ball = {
         x: 250,
         y: 200,
-        radius: 10,
+        radius: 30,
         dx: 2,
         dy: 2,
         draw: function() {
           ctx.beginPath();
           ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
           ctx.fillStyle = "blue"; // Ball color is blue
-          ctx.fill();
+          
+          
+          ctx.stroke();
+          ctx.moveTo(0,0);
+          ctx.lineTo(0,10);
+          ctx.lineTo(0,30);
+          
           ctx.closePath();
+
+          
         },
+        
+        
         move: function() {
           this.x += this.dx;
           this.y += this.dy;
@@ -59,20 +72,21 @@
 
       // Paddle class
       class Paddle {
-        constructor(x, y, width, height) {
+        constructor(x, y, radius) {
           this.x = x;
           this.y = y;
-          this.width = width;
-          this.height = height;
+          this.radius = radius;
+
+          this.radius = 30; 
           this.dy = 10; // The speed of the paddle when using keyboard input
         }
 
         // Draw the paddle
         draw() {
-          ctx.beginPath();
-          ctx.rect(this.x, this.y, this.width, this.height);
-          ctx.fillStyle = "black"; // Paddle color is black
-          ctx.fill();
+            ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          ctx.fillStyle = "black"; // Ball color is black
+          ctx.stroke();
           ctx.closePath();
         }
 
@@ -95,8 +109,8 @@
       }
 
       
-      var leftPaddle = new Paddle(10, 150, 10, 100); // Left paddle
-      var rightPaddle = new Paddle(480, 150, 10, 100); // Right paddle
+      var leftPaddle = new Paddle(40, 200, 10, 100); // Left paddle
+      var rightPaddle = new Paddle(480, 200, 10, 100); // Right paddle
 
       // Detect collision between the ball and paddles
       function detectCollision(paddle) {
