@@ -51,7 +51,7 @@
             drawPeaceSymbol() {
                 let xPosition = this.x;
                 let yPosition = this.y;
-                let radius = this.radius * 0.9; // peace symbol is slightly smaller than the ball
+                let radius = this.radius * 0.9;
 
                 let xEnd, yEnd;
                 
@@ -93,7 +93,7 @@
                 this.y += this.dy;
 
                 if (this.y + this.radius > canvas.height || this.y - this.radius < 0) {
-                    this.dy = -this.dy; // reverse y direction
+                    this.dy = -this.dy;
                 }
 
                 if (this.x - this.radius < 0) {
@@ -162,11 +162,11 @@
             return distance < ball.radius + paddle.radius;
         }
 
-        let collisionCooldown = false; // prevents multiple collisions at once
+        let collisionCooldown = false;
 
         // handles collision effects, scoring, and sets a cooldown period
         function handleCollision(paddle) {
-            ball.dx = -ball.dx; // reverse ball direction
+            ball.dx = -ball.dx;
             showCollisionMessage();
             paddle.score++;
             collisionCooldown = true;
@@ -195,7 +195,7 @@
             if (event.key === "s" || event.key === "S") leftPaddle.move("down");
             if (event.key === "ArrowUp") rightPaddle.move("up");
             if (event.key === "ArrowDown") rightPaddle.move("down");
-            if (event.key === " ") ball.speedUp();
+            if (event.key === "q" || event.key === "Q") ball.speedUp(); // Only Q increases speed now
         });
 
         // main game loop to draw, move, and detect collisions continuously
