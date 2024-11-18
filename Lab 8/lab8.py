@@ -9,10 +9,19 @@ cv2.imwrite('./ATU_GRAY.jpg',gray_image)
 
 nrows = 2
 ncols = 2
+blurredGray = cv2.GaussianBlur(gray_image,(7,7),0)
+
 
 plt.subplot(nrows, ncols,1),plt.imshow(img, cmap = 'gray')
 plt.title('Original'), plt.xticks([]), plt.yticks([])
 
 plt.subplot(nrows, ncols,2),plt.imshow(gray_image, cmap = 'gray')
 plt.title("GRAY SCALE"), plt.xticks([]), plt.yticks([])
+
+plt.subplot(nrows, ncols,3),plt.imshow(blurredGray, cmap = 'gray')
+plt.title('Original Blur'), plt.xticks([]), plt.yticks([])
+
+plt.subplot(nrows, ncols,4),plt.imshow(gray_image, cmap = 'gray')
+plt.title("GRAY SCALE BLUR"), plt.xticks([]), plt.yticks([])
+
 plt.show()
