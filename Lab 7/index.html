@@ -18,28 +18,100 @@
 
         $(document).ready(function() {
 
-            const url = "https://raw.githubusercontent.com/datasets/co2-ppm/refs/heads/main/datapackage.json";
-            $.getJSON(url, function(data) {
-                plotCO2Data(data);
+            //Waits for DOM to load
+            const url = "https://raw.githubusercontent.com/humphs078/programming_for_data_analysis_assignment_2/refs/heads/main/datasets/fused_datasets/json/long_term_fused_data.json";
+            $.getJSON(url, function(data) {//gets json data 
+                plotCO2Data(data); 
             }).fail(function() {
                 console.error("An error occurred while trying to download the JSON file.");
             });
 
         });
 
-        function  plotCO2Data(data) {
-
-            const margin = { top: 20, right: 30, bottom: 30, left: 50 };
-            const width = 800 - margin.left - margin.right;
-            const height = 400 - margin.top - margin.bottom;
-
-            const svg = d3.select("body").append("svg")
+        //Plot function
+        function plotCO2Data(data) {
+        
+        //Graphs dimensions and margins
+        const margin = { top: 20, right: 30, bottom: 50, left: 60 };
+        const width = 800 - margin.left - margin.right;
+        const height = 400 - margin.top - margin.bottom;
+        
+        //SVG container
+        const svg = d3.select("body").append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
 
-        }
+        //To calculate the year
+        data.forEach(d => d.year = 2023 - d.years_before_2023);
+        const filteredData = data.filter(d => d.year >= 1923); //filters last 100 years for the graph
+        
+        //Scales for X and Y
+        const x = d3.scaleLinear()
+            .domain(d3.extent(filteredData, d => d.year))
+            .range([0, width]);
+
+        const y = d3.scaleLinear()
+            .domain([d3.min(filteredData, d => d.co2_ppmv) - 10, d3.max(filteredData, d => d.co2_ppmv) + 10])
+            .range([height, 0]);
+
+        //Creates Axis
+        const xAxis = d3.axisBottom(x).ticks(10).tickFormat(d3.format("d"));
+        const yAxis = d3.axisLeft(y).ticks(6);
+        
+        //Line creater
+        const line = d3.line()
+            .x(d => x(d.year))
+            .y(d => y(d.co2_ppmv))
+            .curve(d3.curveMonotoneX);
+
+        //Appends X axis
+        svg.append("g")
+            .attr("class", "x-axis")
+            .attr("transform", `translate(0,${height})`)
+            .call(xAxis);
+        
+        //Appends Y axis
+        svg.append("g")
+            .attr("class", "y-axis")
+            .call(yAxis);
+
+        //Draws the path of the plot
+        svg.append("path")
+            .datum(filteredData)
+            .attr("class", "line")
+            .attr("fill", "none")
+            .attr("stroke", "red")
+            .attr("stroke-width", 2)
+            .attr("d", line);
+
+        //Adds a title
+        svg.append("text")
+            .attr("x", width / 2)
+            .attr("y", -10)
+            .attr("text-anchor", "middle")
+            .style("font-size", "16px")
+            .style("font-weight", "bold")
+            .text("Atmospheric CO₂ Concentration Over Time");
+        
+        //Adds the X axis label
+        svg.append("text")
+            .attr("x", width / 2)
+            .attr("y", height + margin.bottom - 10)
+            .attr("text-anchor", "middle")
+            .style("font-size", "12px")
+            .text("Year");
+
+        //Adds the Y axis label
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", -margin.left + 15)
+            .attr("x", -height / 2)
+            .attr("text-anchor", "middle")
+            .style("font-size", "12px")
+            .text("CO₂ Concentration (ppm)");
+    }
     </script>
 </body>
 </html>
