@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>D3.js Demo</title>
+    <title>Co2 Data Plot</title>
+    <h1>Michael Ferry</h1>
+    <h2>Lab 7</h2>
+    <h2>G00420185@atu.ie</h2>
+
     <meta charset="UTF-8">
+    <!-- Links to the D3.js v5 and also jQuery -->
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style type="text/css"></style>
@@ -12,11 +17,16 @@
         $(document).ready(function() {
             const url = "https://raw.githubusercontent.com/datasets/co2-ppm/refs/heads/main/datapackage.json";
             $.getJSON(url, function(data) {
-                console.log(data);
+                co2DataPlot(data);
             }).fail(function() {
                 console.error("An error occurred while trying to download the JSON file.");
             });
         });
+        function co2DataPlot(data) {
+        const margin = { top: 20, right: 30, bottom: 30, left: 50 };
+        const width = 800 - margin.left - margin.right;
+        const height = 400 - margin.top - margin.bottom;
+    }
     </script>
 </body>
 </html>
