@@ -20,9 +20,10 @@
 
   </head>
 
-  <h1>Michael</h1>
+ 
   <body>
-
+     <h1>Michael Ferry</h1>
+     <h1>G00420185@atu.ie</h1>
     <canvas id="canvas-for-ball"></canvas>
     
     <script type="text/javascript">
@@ -38,19 +39,25 @@
       var yPos = 10;
       var ySpeed = 2;
 
-      class Ball{
+      class Ball {
+      constructor(xPosition, yPosition, xVelocity, yVelocity, radius, rotation) {
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
+        this.xVelocity = xVelocity;
+        this.yVelocity = yVelocity;
+        this.radius = radius;
+        this.rotation = rotation;
+      }
 
-        constructor(yPos, ySpeed){
-          this.yPos= yPos;
-          this.ySpeed= ySpeed;
-        }
-
-        Draw(){
-          // Draw the ball (stroked, not filled).
+      draw(ctx) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        //Stroke not filled
         ctx.beginPath();
-        ctx.arc(50, this.yPos, 3, 0, 2 * Math.PI);
+        ctx.arc(ball.xPosition, ball.yPosition, ball.radius, 0, 2 * Math.PI);
         ctx.stroke();
-        }
+        ctx.save();
+
+      }
 
         move(){
 
