@@ -57,7 +57,7 @@
                     this.positionY = positionY;
                     this.xVelocity = 0;
                     this.yVelocity = 0;
-                    this.gravity = -0.1;
+                    this.gravity = -0.01;
                 }
             }
             //creates the two spheres
@@ -77,6 +77,14 @@
             planeMesh.position.set(0, 0, 0);
             planeMesh.receiveShadow = true;
             scene.add(planeMesh);
+
+            var cubeGeometry = new THREE.BoxGeometry(8, 8, 8);
+            var cubeMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, transparent: true, opacity: 0.2, wireframe: true });
+            var cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
+            cubeMesh.position.set(0, 4, 0);
+            cubeMesh.rotation.y = Math.PI / 3;
+            cubeMesh.rotation.x = Math.PI;
+            scene.add(cubeMesh);
 
             //Loops though every iteration
             for (var i = 0; i < spheres.length; i++) {
@@ -99,7 +107,7 @@
             function repeatMe() {
                 requestAnimationFrame(repeatMe);
 
-                var i = 0;
+                let i = 0;
 
                 spheresMesh.forEach(function(sphereMesh) {
                     if (sphereMesh.position.y > 0) {
@@ -111,7 +119,7 @@
                 /*When the sphere hits the ground, its position is reset*/
                 sphereMesh.position.y = 0
                 /*The velocity of the ball is then reversed using -1 and then multiplied by 0.7 to reduce its speed*/
-                spheres[i].yVelocity = (spheres[i].yVelocity * -1) * 0.5;
+                spheres[i].yVelocity = (spheres[i].yVelocity * -1) * 0.7;//Will start the bounce again
                 if (spheres[i].yVelocity < 0.1) {
                     spheres[i].yVelocity = 0; // Stops bouncing if the velocity is too low
                 }
