@@ -4,14 +4,20 @@ from matplotlib import pyplot as plt
 
 img = cv2.imread("ATU.jpg")
 
+# Normal Grey Image
 gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 cv2.imwrite('./ATU_GRAY.jpg',gray_image)
 
 nrows = 3
 ncols = 3
+
+# Grey image with intense blur effect
 blurredGray = cv2.GaussianBlur(gray_image,(7,7),0)
 
+# Sobel on X axis
 sobelx = cv2.Sobel(blurredGray,cv2.CV_64F,1,0,ksize=5) # x dir
+
+# Sobel  on Y axis
 sobely = cv2.Sobel(blurredGray,cv2.CV_64F,0,1,ksize=5) # y dir
 
 plt.subplot(nrows, ncols,1),plt.imshow(cv2.cvtColor(img, 
