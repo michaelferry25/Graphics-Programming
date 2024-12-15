@@ -57,34 +57,83 @@
         ctx.stroke();
         ctx.save();
 
+        // Everytime the ball is drawn, the peace symbol is also redrawn
+        this.drawPeaceSymbol();
+
       }
+
+      drawPeaceSymbol() {
+
+
+        /*
+        ball.xPosition = The center of the ball's x coordinate
+        ball.yPosition = The center of the ball's y coordinate
+        ball.radius = The length of the line, we want the line to be the same length as the center to the arc
+        ball.rotation = How much we want to rotate the balk by up to 360 degree's
+        ball.rotation * (Math.PI / 180) = Converts our rotation number to radians is degrees * PI / 180
+        */
+        let xEnd = ball.xPosition + ball.radius * Math.cos(ball.rotation * (Math.PI / 180));
+        let yEnd = ball.yPosition + ball.radius * Math.sin(ball.rotation * (Math.PI / 180));
+        ctx.beginPath();
+        ctx.moveTo(ball.xPosition, ball.yPosition);
+        ctx.lineTo(xEnd, yEnd);
+        ctx.stroke();
+
+        xEnd = ball.xPosition + ball.radius * Math.cos((180 + ball.rotation) * (Math.PI / 180));
+        yEnd = ball.yPosition + ball.radius * Math.sin((180 + ball.rotation) * (Math.PI / 180));
+        ctx.beginPath();
+        ctx.moveTo(ball.xPosition, ball.yPosition);
+        ctx.lineTo(xEnd, yEnd);
+        ctx.stroke();
+
+        xEnd = ball.xPosition + ball.radius * Math.cos((60 + ball.rotation) * (Math.PI / 180));
+        yEnd = ball.yPosition + ball.radius * Math.sin((60 + ball.rotation) * (Math.PI / 180));
+        ctx.beginPath();
+        ctx.moveTo(ball.xPosition, ball.yPosition);
+        ctx.lineTo(xEnd, yEnd);
+        ctx.stroke();
+
+        xEnd = ball.xPosition + ball.radius * Math.cos((295 + ball.rotation) * (Math.PI / 180));
+        yEnd = ball.yPosition + ball.radius * Math.sin((295 + ball.rotation) * (Math.PI / 180));
+        ctx.beginPath();
+        ctx.moveTo(ball.xPosition, ball.yPosition);
+        ctx.lineTo(xEnd, yEnd);
+        ctx.stroke();
+
+        this.rotation += 1;
+
+        }
 
       //Move function sets out the logic behind the ball's movement and physics
       move() {
         // When the Y Position of the Ball is more than or equal ot the edge of the border
         if (ball.yPosition >= yBorder) {
           ball.yVelocity = ball.yVelocity * -1;
+          ball.rotation += 5; // Spin ball faster when it hits a border
         }
 
         // When the X Position of the Ball is more than or equal to the edge of the border
         if (ball.xPosition >= xBorder) {
           ball.xVelocity = ball.xVelocity * -1;
+          ball.rotation += 5;
         }
 
         // This will check if the border of the ball has hit a Y Coordinate edge
         if (ball.yPosition <= ball.radius) {
           ball.yVelocity = ball.yVelocity * -1;
+          ball.rotation += 5;
         }
 
-        // will check if the border of the ball has hit a X Coordinate edge
+        // This will check if the border of the ball has hit a X Coordinate edge
         if (ball.xPosition <= ball.radius) {
           ball.xVelocity = ball.xVelocity * -1;
         }
         ball.yPosition += ball.yVelocity;
         ball.xPosition += ball.xVelocity;
+        ball.rotation += 5;
       }
     }
-    
+
     var ball = new Ball(40, 40, 3, 3, 30, 0);
 
     var yBorder = canvas.height - ball.radius;
