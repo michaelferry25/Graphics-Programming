@@ -59,29 +59,42 @@
 
       }
 
-        move(){
-
-          this.yPos += this.ySpeed;
-
-          if(this.yPos > 144){
-            this.ySpeed= this.ySpeed * -1;
-          }
+      //Move function sets out the logic behind the ball's movement and physics
+      move() {
+        // When the Y Position of the Ball is more than or equal ot the edge of the border
+        if (ball.yPosition >= yBorder) {
+          ball.yVelocity = ball.yVelocity * -1;
         }
 
+        // When the X Position of the Ball is more than or equal to the edge of the border
+        if (ball.xPosition >= xBorder) {
+          ball.xVelocity = ball.xVelocity * -1;
+        }
+
+        // This will check if the border of the ball has hit a Y Coordinate edge
+        if (ball.yPosition <= ball.radius) {
+          ball.yVelocity = ball.yVelocity * -1;
+        }
+
+        // will check if the border of the ball has hit a X Coordinate edge
+        if (ball.xPosition <= ball.radius) {
+          ball.xVelocity = ball.xVelocity * -1;
+        }
+        ball.yPosition += ball.yVelocity;
+        ball.xPosition += ball.xVelocity;
       }
+    }
+    
+    var ball = new Ball(40, 40, 3, 3, 30, 0);
 
-      b1 = new Ball(15,1);
+    var yBorder = canvas.height - ball.radius;
+    var xBorder = canvas.width - ball.radius;
 
-      // A function to repeat every time the animation loops.
-      function repeatme() {
-
-        ctx.clearRect(0, 0, 300, 150);
-
-       b1.Draw();
-       b1.move();
-
-        window.requestAnimationFrame(repeatme);
-      }
+    function repeatme() {
+      ball.draw(ctx);
+      ball.move();
+      window.requestAnimationFrame(repeatme);
+    }
 
       
       // Get the animation going.
