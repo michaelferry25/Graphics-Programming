@@ -60,9 +60,9 @@
                     this.gravity = -0.1;
                 }
             }
-            //creates the sphere
-            var sphere = new Sphere(1,32,32,0x769E3C, false, 0 , 5);
-            spheres.push(sphere);
+            //creates the two spheres
+            spheres.push(new Sphere(1, 32, 32, 0x769E3C, false, 0, 5));
+            spheres.push(new Sphere(1, 32, 32, 0x769E3C, false, 0, 8));
 
             //white spotlight on scene
             var spotLight = new THREE.SpotLight(0xffffff);
@@ -70,7 +70,7 @@
             scene.add(spotLight);
 
             var planeGeometry = new THREE.PlaneGeometry(10, 10);
-            var planeMaterial = new THREE.ShadowMaterial({ opacity: 0.5 }); //ShadowMaterial for shadows
+            var planeMaterial = new THREE.MeshPhongMaterial({ color:0x0077ff }); //ShadowMaterial for shadows
             var planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
             // The plane is then positioned vertically, and has shadows aswell
             planeMesh.rotation.y = Math.PI / 2;
